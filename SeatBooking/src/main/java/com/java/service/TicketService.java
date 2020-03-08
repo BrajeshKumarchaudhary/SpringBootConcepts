@@ -34,4 +34,9 @@ public class TicketService {
 		tdao.deleteById(id);
 	}
 
+	public Ticket updateTicket(Ticket t) {
+		// TODO Auto-generated method stub
+		return tdao.save(t);
+	}
+
 }
