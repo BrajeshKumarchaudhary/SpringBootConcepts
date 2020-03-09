@@ -2,7 +2,9 @@ package com.java.controller;
 
 import java.util.Date;
 import java.util.Optional;
+import java.util.logging.Logger;
 
+import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,11 +21,13 @@ import com.java.service.TicketService;
 @RestController
 @RequestMapping(value = "/api/tickets")
 public class TicketController {
+	org.jboss.logging.Logger log=LoggerFactory.logger(TicketController.class);
 	@Autowired
 	TicketService tservcie;
 
 	@PostMapping(value = "/create")
 	public Ticket create(@RequestBody Ticket t) {
+		
 	   return tservcie.createTicket(t);
 	}
 	@GetMapping(value = "/ticket/{ticketid}")
