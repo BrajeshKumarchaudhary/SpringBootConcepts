@@ -1,0 +1,72 @@
+version: '3.3'
+
+services:
+  gateway1:
+    image: gateway/gatewayservice
+    container_name: gatewayservice
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    ports:
+      - "9091:9091"
+    
+  home:
+    image: home/homeservice
+    container_name: homeservice
+    build:
+      context: ./Home
+      dockerfile: Dockerfile
+    ports:
+      - "6060:6060"
+    
+
+  order:
+    image: order/orderservice
+    container_name: orderservice
+    build:
+      context: ./Order
+      dockerfile: Dockerfile
+    ports:
+      - "6061:6061"
+   
+
+
+  cart:
+    image: cart/cartservice
+    container_name: cartservice
+    build:
+      context: ./Cart 
+      dockerfile: Dockerfile
+    ports:
+      - "6062:6062"
+   
+
+  product:
+    image: product/productservice
+    container_name: productservice
+    build:
+      context: ./Product 
+      dockerfile: Dockerfile
+    ports:
+      - "6063:6063"
+   
+
+  login:
+    image: login/loginservice
+    container_name: loginservice
+    build:
+      context: ./login 
+      dockerfile: Dockerfile
+    ports:
+      - "6064:6064"
+  
+
+  signup:
+    image: signup/signupservice
+    container_name: signupservice
+    build:
+      context: ./signup 
+      dockerfile: Dockerfile
+    ports:
+      - "6065:6065"
+   
