@@ -11,3 +11,5 @@
 7. [Spring boot with Swagger ](https://github.com/BrajeshKumarchaudhary/SpringBootConcepts/tree/master/SpringBootSwagger)
 8. [Spring boot with white label error page](https://github.com/BrajeshKumarchaudhary/SpringBootConcepts/tree/master/SpringBootWhiteLabelErrorMeassage)
 9. [Spring with Jersy library](https://github.com/BrajeshKumarchaudhary/SpringBootConcepts/tree/master/SpringWithJersy)
+
+10. [Spring boot with RabbitMq](https://github.com/BrajeshKumarchaudhary/SpringBootConcepts/tree/master/springboot-rabbitmq)
