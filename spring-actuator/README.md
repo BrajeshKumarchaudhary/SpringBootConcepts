@@ -127,7 +127,7 @@ spring.security.user.roles=ADMIN
 </dependency>
 ```
 
-[Prometheus]()
+![Prometheus](https://github.com/BrajeshKumarchaudhary/SpringBootConcepts/blob/master/spring-actuator/p.png)
 
 ---
 
