@@ -15,3 +15,4 @@
 10. [Spring boot with RabbitMq](https://github.com/BrajeshKumarchaudhary/SpringBootConcepts/tree/master/springboot-rabbitmq)
 
 11. [Spring boot Actuator-Prometheus](https://github.com/BrajeshKumarchaudhary/SpringBootConcepts/tree/master/spring-actuator)
+12. [Execution on SpringBoot Application Startup](https://github.com/BrajeshKumarchaudhary/SpringBootConcepts/tree/master/spring-onStartupExecution)
