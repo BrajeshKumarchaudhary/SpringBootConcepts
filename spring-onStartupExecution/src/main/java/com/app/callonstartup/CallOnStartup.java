@@ -88,7 +88,7 @@ public class CallOnStartup implements ApplicationListener<ContextRefreshedEvent>
   public static Date addSecondsToDate(Date settledDate, Integer seconds) {
       Calendar cal = Calendar.getInstance();
       cal.setTime(settledDate);
-      cal.add(Calendar.SECOND, seconds);
+      cal.add(Calendar.MINUTE, seconds);
       return cal.getTime();
   }
 	
