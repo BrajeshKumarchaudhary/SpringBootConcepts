@@ -13,9 +13,9 @@ import org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean;
 
 import java.util.Properties;
 
-@Configuration
-@PropertySource("classpath:mail.properties")
-@EnableAsync
+//@Configuration
+//@PropertySource("classpath:mail.properties")
+//@EnableAsync
 public class MailConfig {
 
     @Value("${spring.mail.default-encoding}")
@@ -33,14 +33,14 @@ public class MailConfig {
     @Value("${spring.mail.port}")
     private Integer mailPort;
 
-    @Value("${spring.mail.protocol}")
-    private String mailProtocol;
+//    @Value("${spring.mail.protocol}")
+//    private String mailProtocol;
 
     @Value("${spring.mail.debug}")
     private String mailDebug;
 
-    @Value("${spring.mail.smtp.auth}")
-    private String mailSmtpAuth;
+//    @Value("${spring.mail.smtp.auth}")
+//    private String mailSmtpAuth;
 
     @Value("${spring.mail.smtp.starttls.enable}")
     private String mailSmtpStartTls;
@@ -65,8 +65,8 @@ public class MailConfig {
 
         Properties javaMailProperties = new Properties();
         javaMailProperties.put("mail.smtp.starttls.enable", mailSmtpStartTls);
-        javaMailProperties.put("mail.smtp.auth", mailSmtpAuth);
-        javaMailProperties.put("mail.transport.protocol", mailProtocol);
+//        javaMailProperties.put("mail.smtp.auth", mailSmtpAuth);
+//        javaMailProperties.put("mail.transport.protocol", mailProtocol);
         javaMailProperties.put("mail.debug", mailDebug);
 
         mailSender.setJavaMailProperties(javaMailProperties);

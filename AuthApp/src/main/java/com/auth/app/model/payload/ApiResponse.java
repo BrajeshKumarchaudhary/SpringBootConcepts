@@ -7,7 +7,7 @@ import java.time.Instant;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse {
 
-    private final String data;
+    private final Object data;
     private final Boolean success;
     private final String timestamp;
     private final String cause;
@@ -21,7 +21,7 @@ public class ApiResponse {
         this.path = path;
     }
 
-    public ApiResponse(Boolean success, String data) {
+    public ApiResponse(Boolean success, Object data) {
         this.timestamp = Instant.now().toString();
         this.data = data;
         this.success = success;
@@ -29,7 +29,7 @@ public class ApiResponse {
         this.path = null;
     }
 
-    public String getData() {
+    public Object getData() {
         return data;
     }
 

@@ -15,8 +15,18 @@ public class UpdatePasswordRequest {
     @NotBlank(message = "New password must not be blank")
     @ApiModelProperty(value = "Valid new password string", required = true, allowableValues = "NonEmpty String")
     private String newPassword;
+    private String emailId;
+    
 
-    public UpdatePasswordRequest(String oldPassword, String newPassword) {
+    public String getEmailId() {
+		return emailId;
+	}
+
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
+	}
+
+	public UpdatePasswordRequest(String oldPassword, String newPassword) {
         this.oldPassword = oldPassword;
         this.newPassword = newPassword;
     }

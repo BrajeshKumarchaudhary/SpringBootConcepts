@@ -18,7 +18,7 @@ public class CustomEndPoints {
 	}
 	@ReadOperation
     public String customEndPointByName(@Selector String name) {
-        return "custom-end-point";
+        return "custom-end-point--"+name;
     }
 
     @WriteOperation

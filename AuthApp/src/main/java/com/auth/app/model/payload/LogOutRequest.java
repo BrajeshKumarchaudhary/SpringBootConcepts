@@ -14,8 +14,18 @@ public class LogOutRequest {
     @ApiModelProperty(value = "Device info", required = true, dataType = "object", allowableValues = "A valid " +
             "deviceInfo object")
     private DeviceInfo deviceInfo;
+    private long userId;
+    
+    
+    public long getUserId() {
+		return userId;
+	}
 
-    public LogOutRequest() {
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+
+	public LogOutRequest() {
     }
 
     public LogOutRequest(DeviceInfo deviceInfo) {

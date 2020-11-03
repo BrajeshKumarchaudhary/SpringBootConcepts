@@ -146,9 +146,8 @@ public class AuthService {
     /**
      * Updates the password of the current logged in user
      */
-    public Optional<User> updatePassword(CustomUserDetails customUserDetails,
-                                         UpdatePasswordRequest updatePasswordRequest) {
-        String email = customUserDetails.getEmail();
+    public Optional<User> updatePassword(UpdatePasswordRequest updatePasswordRequest) {
+        String email = updatePasswordRequest.getEmailId();
         User currentUser = userService.findByEmail(email)
                 .orElseThrow(() -> new UpdatePasswordException(email, "No matching user found"));
 
@@ -253,5 +252,11 @@ public class AuthService {
                     userService.save(user);
                     return user;
                 });
+    }
+    /**
+     * Finds a user in the database by email
+     */
+    public Optional<User> findByEmail(String email) {
+        return userService.findByEmail(email);
     }
 }

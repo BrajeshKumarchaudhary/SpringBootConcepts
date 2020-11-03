@@ -31,6 +31,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         return dbUser.map(CustomUserDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("Couldn't find a matching user email in the database for " + email));
     }
+    public Optional<User> loadUserByEmail(String email) throws UsernameNotFoundException {
+        Optional<User> dbUser = userRepository.findByEmail(email);
+        logger.info("Fetched user : " + dbUser + " by " + email);
+        return dbUser;
+    }
 
     public UserDetails loadUserById(Long id) {
         Optional<User> dbUser = userRepository.findById(id);

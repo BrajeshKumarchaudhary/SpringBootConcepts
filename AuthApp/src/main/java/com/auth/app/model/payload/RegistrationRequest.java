@@ -26,14 +26,31 @@ public class RegistrationRequest {
     @ApiModelProperty(value = "Flag denoting whether the user is an admin or not", required = true,
             dataType = "boolean", allowableValues = "true, false")
     private Boolean registerAsAdmin;
+    
+    @NullOrNotBlank(message = "Registration username can be null but not blank")
+    @ApiModelProperty(value = "A valid firstname",required = false, allowableValues = "NonEmpty String")
+    private String firstname;
 
+    @NullOrNotBlank(message = "Registration username can be null but not blank")
+    @ApiModelProperty(value = "A valid lastname",required = false, allowableValues = "NonEmpty String")
+    private String lasttname;
+
+    
+    
+    
+    
     public RegistrationRequest(String username, String email,
-                               String password, Boolean registerAsAdmin) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.registerAsAdmin = registerAsAdmin;
-    }
+			@NotNull(message = "Registration password cannot be null") String password,
+			@NotNull(message = "Specify whether the user has to be registered as an admin or not") Boolean registerAsAdmin,
+			String firstname, String lasttname) {
+		super();
+		this.username = username;
+		this.email = email;
+		this.password = password;
+		this.registerAsAdmin = registerAsAdmin;
+		this.firstname = firstname;
+		this.lasttname = lasttname;
+	}
 
     public RegistrationRequest() {
     }
@@ -69,4 +86,21 @@ public class RegistrationRequest {
     public void setRegisterAsAdmin(Boolean registerAsAdmin) {
         this.registerAsAdmin = registerAsAdmin;
     }
+
+	public String getFirstname() {
+		return firstname;
+	}
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public String getLasttname() {
+		return lasttname;
+	}
+
+	public void setLasttname(String lasttname) {
+		this.lasttname = lasttname;
+	}
+    
 }

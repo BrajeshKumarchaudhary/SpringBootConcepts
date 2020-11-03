@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiParam;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +32,7 @@ import com.auth.app.exception.TokenRefreshException;
 import com.auth.app.exception.UserLoginException;
 import com.auth.app.exception.UserRegistrationException;
 import com.auth.app.model.CustomUserDetails;
+import com.auth.app.model.User;
 import com.auth.app.model.payload.ApiResponse;
 import com.auth.app.model.payload.JwtAuthenticationResponse;
 import com.auth.app.model.payload.LoginRequest;
@@ -41,14 +44,22 @@ import com.auth.app.model.token.EmailVerificationToken;
 import com.auth.app.model.token.RefreshToken;
 import com.auth.app.security.JwtTokenProvider;
 import com.auth.app.service.AuthService;
+import com.auth.app.service.MailService;
+import com.auth.app.service.UserService;
 
+import freemarker.template.TemplateException;
+
+import javax.mail.MessagingException;
 import javax.validation.Valid;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
-@Api(value = "Authorization Rest API", description = "Defines endpoints that can be hit only when the user is not logged in. It's not secured by default.")
-
+@Api(tags = "Authorization Rest API")
 public class AuthController {
 
     private static final Logger logger = Logger.getLogger(AuthController.class);
@@ -62,9 +73,10 @@ public class AuthController {
         this.tokenProvider = tokenProvider;
         this.applicationEventPublisher = applicationEventPublisher;
     }
-
     /**
      * Checks is a given email is in use or not.
+     * @param email
+     * @return
      */
     @ApiOperation(value = "Checks if the given email is in use")
     @GetMapping("/checkEmailInUse")
@@ -72,9 +84,10 @@ public class AuthController {
         Boolean emailExists = authService.emailAlreadyExists(email);
         return ResponseEntity.ok(new ApiResponse(true, emailExists.toString()));
     }
-
     /**
      * Checks is a given username is in use or not.
+     * @param username
+     * @return
      */
     @ApiOperation(value = "Checks if the given username is in use")
     @GetMapping("/checkUsernameInUse")
@@ -84,9 +97,10 @@ public class AuthController {
         return ResponseEntity.ok(new ApiResponse(true, usernameExists.toString()));
     }
 
-
     /**
-     * Entry point for the user log in. Return the jwt auth token and the refresh token
+     *  Entry point for the user log in. Return the jwt auth token and the refresh token
+     * @param loginRequest
+     * @return
      */
     @PostMapping("/login")
     @ApiOperation(value = "Logs the user in to the system and return the auth tokens")
@@ -107,10 +121,11 @@ public class AuthController {
                 })
                 .orElseThrow(() -> new UserLoginException("Couldn't create refresh token for: [" + loginRequest + "]"));
     }
-
     /**
      * Entry point for the user registration process. On successful registration,
      * publish an event to generate email verification token
+     * @param registrationRequest
+     * @return
      */
     @PostMapping("/register")
     @ApiOperation(value = "Registers the user and publishes an event to generate the email verification")
@@ -126,11 +141,12 @@ public class AuthController {
                 })
                 .orElseThrow(() -> new UserRegistrationException(registrationRequest.getEmail(), "Missing user object in database"));
     }
-
     /**
      * Receives the reset link request and publishes an event to send email id containing
      * the reset link if the request is valid. In future the deeplink should open within
      * the app itself.
+     * @param passwordResetLinkRequest
+     * @return
      */
     @PostMapping("/password/resetlink")
     @ApiOperation(value = "Receive the reset link request and publish event to send mail containing the password " +
@@ -147,12 +163,12 @@ public class AuthController {
                 })
                 .orElseThrow(() -> new PasswordResetLinkException(passwordResetLinkRequest.getEmail(), "Couldn't create a valid token"));
     }
-
     /**
      * Receives a new passwordResetRequest and sends the acknowledgement after
      * changing the password to the user's mail through the event.
+     * @param passwordResetRequest
+     * @return
      */
-
     @PostMapping("/password/reset")
     @ApiOperation(value = "Reset the password after verification and publish an event to send the acknowledgement " +
             "email")
@@ -167,17 +183,27 @@ public class AuthController {
                 })
                 .orElseThrow(() -> new PasswordResetException(passwordResetRequest.getToken(), "Error in resetting password"));
     }
-
     /**
      * Confirm the email verification token generated for the user during
      * registration. If token is invalid or token is expired, report error.
+     * @param token
+     * @return
      */
     @GetMapping("/registrationConfirmation")
     @ApiOperation(value = "Confirms the email verification token that has been generated for the user during registration")
     public ResponseEntity confirmRegistration(@ApiParam(value = "the token that was sent to the user email") @RequestParam("token") String token) {
-
         return authService.confirmEmailRegistration(token)
-                .map(user -> ResponseEntity.ok(new ApiResponse(true, "User verified successfully")))
+                .map(user -> {
+                	URI yahoo = null;
+					try {
+						yahoo = new URI("http://www.google.com");
+					} catch (URISyntaxException e) {
+						e.printStackTrace();
+					}
+                    HttpHeaders httpHeaders = new HttpHeaders();
+                    httpHeaders.setLocation(yahoo);
+                    return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
+                })
                 .orElseThrow(() -> new InvalidTokenRequestException("Email Verification Token", token, "Failed to confirm. Please generate a new email verification request"));
     }
 
@@ -224,4 +250,17 @@ public class AuthController {
                 })
                 .orElseThrow(() -> new TokenRefreshException(tokenRefreshRequest.getRefreshToken(), "Unexpected error during token refresh. Please logout and login again."));
     }
+    
+    @GetMapping("/mail")
+    public String checkMail() throws IOException, TemplateException, MessagingException {
+    	System.out.println("I m calling so proceed with my exisjcjjcjdcbjnjnbwiew");
+    	Optional<User> user=authService.findByEmail("hdmu209112@gmail.com");
+    	UriComponentsBuilder urlBuilder = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/auth/registrationConfirmation");
+        OnUserRegistrationCompleteEvent onUserRegistrationCompleteEvent = new OnUserRegistrationCompleteEvent(user.get(), urlBuilder);
+        applicationEventPublisher.publishEvent(onUserRegistrationCompleteEvent);
+        logger.info("Registered User returned [API[: " + user.get());
+    	return "Mail Send Successfully";
+    }
+    
+    
 }

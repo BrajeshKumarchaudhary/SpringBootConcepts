@@ -90,8 +90,10 @@ public class UserService {
         Boolean isNewUserAsAdmin = registerRequest.getRegisterAsAdmin();
         newUser.setEmail(registerRequest.getEmail());
         newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
-        newUser.setUsername(registerRequest.getEmail());
+        newUser.setUsername(registerRequest.getUsername());
         newUser.addRoles(getRolesForNewUser(isNewUserAsAdmin));
+        newUser.setFirstName(registerRequest.getFirstname());
+        newUser.setLastName(registerRequest.getLasttname());
         newUser.setActive(true);
         newUser.setEmailVerified(false);
         return newUser;
@@ -115,9 +117,9 @@ public class UserService {
      * Log the given user out and delete the refresh token associated with it. If no device
      * id is found matching the database for the given user, throw a log out exception.
      */
-    public void logoutUser(@CurrentUser CustomUserDetails currentUser, LogOutRequest logOutRequest) {
+    public void logoutUser(LogOutRequest logOutRequest) {
         String deviceId = logOutRequest.getDeviceInfo().getDeviceId();
-        UserDevice userDevice = userDeviceService.findByUserId(currentUser.getId())
+        UserDevice userDevice = userDeviceService.findByUserId(logOutRequest.getUserId())
                 .filter(device -> device.getDeviceId().equals(deviceId))
                 .orElseThrow(() -> new UserLogoutException(logOutRequest.getDeviceInfo().getDeviceId(), "Invalid device Id supplied. No matching device found for the given user "));
 
