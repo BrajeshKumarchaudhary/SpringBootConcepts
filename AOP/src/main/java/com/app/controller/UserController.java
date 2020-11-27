@@ -1,5 +1,6 @@
 package com.app.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import com.app.aspect.ExceptionThrow;
 import com.app.aspect.LogExecutionTime;
 import com.app.model.User;
 import com.app.service.UserService;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 
 @RestController
 public class UserController {
@@ -31,5 +33,19 @@ public class UserController {
 	@ExceptionThrow
 	public List<User> get(@RequestParam("userId") int userId) throws Exception{
 		throw new Exception("No User Found");
+	}
+	
+	
+	@GetMapping(value = "fault")
+	@HystrixCommand(fallbackMethod = "defaultRes")
+	public List<User> checkFault(@RequestParam("userId") int userId) throws Exception{
+		throw new Exception("No User Found");
+	}
+	
+	
+	public List<User> defaultRes(@RequestParam("userId") int userId) throws Exception{
+		List<User> user=new ArrayList<User>();
+		user.add(new User());
+	    return user;
 	}
 }
