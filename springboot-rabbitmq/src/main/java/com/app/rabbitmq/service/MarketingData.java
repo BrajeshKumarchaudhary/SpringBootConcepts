@@ -24,7 +24,7 @@ public class MarketingData {
 		Notification obj=new Notification();
 		obj.setExchangeName("direct-exchange");
 		obj.setRoutingKey("marketing");
-		obj.setMessage("Hello Brajesh Kumar");
+		obj.setMessage("Hello Brajesh Kumar I m java developer");
 		amqpTemplate.convertAndSend(obj.getExchangeName(), obj.getRoutingKey(), obj.getMessage());
 	}
 }
