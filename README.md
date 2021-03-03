@@ -20,3 +20,16 @@
 13. [Spring boot Request Logging](https://github.com/BrajeshKumarchaudhary/SpringBootConcepts/tree/master/springboot-requestlogingAndApiTokenValidation)
 
 14. [DockerFile](https://github.com/BrajeshKumarchaudhary/SpringBootConcepts/tree/master/Docker)
+
+15. [Cross Origin Implementation](https://github.com/BrajeshKumarchaudhary/SpringBootConcepts/tree/master/SpringBoot-Origin)
+
+16. [Generate QR (Quick Response Code) Using java](https://github.com/BrajeshKumarchaudhary/SpringBootConcepts/tree/master/QRcode)
+
+17. [Spring Boot Test With Mockito](https://github.com/BrajeshKumarchaudhary/SpringBootConcepts/tree/master/SpringBoot-Mockito)
+
+18. [Spring Boot Multiple dataBase Connection](https://github.com/BrajeshKumarchaudhary/SpringBootConcepts/tree/master/MultipleDB)
+
+19. [Spring Boot Jasper Report](https://github.com/BrajeshKumarchaudhary/SpringBootConcepts/tree/master/jasper-report)
+
+20. [Spring WebFlux Basic API]()
+21. [SPring WebFlux Basic WebClient for REST CALL]()
