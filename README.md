@@ -33,3 +33,5 @@
 
 20. [Spring WebFlux Basic API](https://github.com/BrajeshKumarchaudhary/Spring-boot-Reactive-programming/tree/main/SpringBoot-ReactiveAPI)
 21. [SPring WebFlux Basic WebClient for REST CALL](https://github.com/BrajeshKumarchaudhary/Spring-boot-Reactive-programming/tree/main/SpringBoot-WebClient)
+
+22. [Aws S3 Storage Service with Spring boot](https://github.com/BrajeshKumarchaudhary/SpringBootConcepts/tree/master/s3-aws-storage)
