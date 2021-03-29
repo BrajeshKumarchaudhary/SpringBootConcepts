@@ -1,0 +1,15 @@
+Problem:-
+
+In this problem, we have provided you one project containing some entities and a database dump. You need to use this project and dump to create two API's:-
+
+1) Create an API to import an excel sheet present in the zip. While importing the excel file follow bellow points.
+
+a) Unit Name, status, description will store in the unit table.
+b) The type is already present in the unit_type table or not. If not present create a entry in unit_type table and store the id of 	row in the unit table as unit_type.
+c) ConversionUid column contains the row number for eg:- 3 that means 3rd row in the excel sheet. So you need to map the id from the database of the current row and ConversionUid column row (i.e 3rd-row id from database) in the unit_conversion_mapping table as conversion_from is the id of the current row and conversion_to is the id of ConversionUid row and value as conversion value from the excel sheet.
+*Make sure no duplicate is allowed while storing data in the database.
+
+2) Create an API to get a list of units in the same structure as given in the excel file in which if we provide:-
+
+a) PageNo and Page size so we will get data according to pagination and if no pageNo and page size is provided then all data is visible.
+b) Filter Option (optional) which will filter data by unit name or unit type for eg:- if provide distance in a filter then all the units having distance as type will show in the output.
