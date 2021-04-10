@@ -18,4 +18,11 @@ public class AccountController {
 	public Account getAccountDetail(@RequestParam(value = "accountId") Integer accountId) throws Exception {
 		return accountService.getAccountInfo(accountId);
 	}
+	
+	
+	@GetMapping(value = "/getAccountAmount")
+	public Integer getAccountAmount(@RequestParam(value = "accountId") Integer accountId) throws Exception {
+		return 1000;
+	}
+
 }

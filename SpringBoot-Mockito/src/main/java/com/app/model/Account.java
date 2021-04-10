@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Account {
-	private Integer accountId;
+	private int accountId;
 	private String accountNumber;
 	private String accountHolderName;
 	private String branchName;
