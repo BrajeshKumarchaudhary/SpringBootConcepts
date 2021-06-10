@@ -1,24 +1,26 @@
 package com.home.controller;
 
-import java.util.Map;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
-@RestController
+@Controller
 public class HomeController {
- public static  Logger log=LoggerFactory.getLogger(HomeController.class);
-	@RequestMapping(value="/home")
-	public Map index(HttpServletRequest request,@RequestParam Map<String,String> allRequestParams)
-	{
-	
-		log.info("Request is comming"+allRequestParams.entrySet());
-		return allRequestParams;
+
+	@GetMapping(value = "/")
+	public String index(Model model ) {
+		return "auth/login";
 	}
 	
+	@GetMapping(value = "/sign-up")
+	public String signUp(Model model ) {
+		return "auth/sign-up";
 	}
+	
+	@GetMapping(value = "/dashboard")
+	public String dashBoard(Model model ) {
+		return "admin/dashboard";
+	}
+	
+	
+}

@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.order</groupId>
-	<artifactId>Order</artifactId>
+	<artifactId>order</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Order</name>
+	<name>order</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
