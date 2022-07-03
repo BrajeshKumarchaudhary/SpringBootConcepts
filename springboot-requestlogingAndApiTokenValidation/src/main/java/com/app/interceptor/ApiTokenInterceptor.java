@@ -13,28 +13,32 @@ public class ApiTokenInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
                              Object handler) throws Exception {
 		
-		if (!(handler instanceof HandlerMethod)) {
+		if (handler instanceof HandlerMethod) {
             if (request.getRequestURI().contains("swagger")) {
                 return HandlerInterceptor.super.preHandle(request, response, handler);
             }
-		}
 		HandlerMethod handlerMethod = (HandlerMethod) handler;
 		ApiKeyVerify verifyApiToken = handlerMethod.getMethod().getAnnotation(ApiKeyVerify.class);
 	    if(verifyApiToken!=null) {
-	    	verifyApiKey(request,verifyApiToken);
+	    	if(verifyApiKey(request,verifyApiToken,response)) {
+	    		return HandlerInterceptor.super.preHandle(request, response, handler);		
+	    	}
 	    }
-   
-		 return HandlerInterceptor.super.preHandle(request, response, handler);
+		}
+		 return false;
     }
 
-	private void verifyApiKey(HttpServletRequest request, ApiKeyVerify verifyApiToken) throws Exception {
+	private boolean verifyApiKey(HttpServletRequest request, ApiKeyVerify verifyApiToken,HttpServletResponse response) throws Exception {
+        boolean isValid=false;
 		String token = request.getHeader("Api-key");
         if (token == null || token.isEmpty()) {
+        	
             throw new MissingServletRequestParameterException("clientSecret", "String");
         }
         if(!token.equalsIgnoreCase("API")) {
         	throw new Exception("Invalid API KEY");
         }
+        return isValid;
 	}
 
 }

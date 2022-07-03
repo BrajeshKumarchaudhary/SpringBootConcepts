@@ -15,6 +15,13 @@ public class LoggerTestController {
 		return "Okay";
 	}
 	
+	@GetMapping(value = "/swagger")
+	//@ApiKeyVerify
+	public String testSkipUrl()
+	{
+		return "Okay";
+	}
+	
 	
 	@GetMapping(value = "/test1")
 	public String test1()
