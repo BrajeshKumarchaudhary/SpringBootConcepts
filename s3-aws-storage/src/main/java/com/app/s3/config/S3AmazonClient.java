@@ -1,18 +1,43 @@
 package com.app.s3.config;
 
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+
+/**
+ * AWS S3 Client, That Use to Perform CRUD Operation on AWS S3 Bucket
+ * @author brajesh
+ *
+ */
 
 @Configuration
 public class S3AmazonClient {
+	@Value("${cloud.aws.credentials.accessKey}")
+    private String awsId;
 
+    @Value("${cloud.aws.credentials.secretKey}")
+    private String awsKey;
+
+    @Value("${cloud.aws.region.static}")
+    private String region;
+
+    @Bean
+    public AmazonS3 s3client() {
+
+        BasicAWSCredentials awsCredentials = new BasicAWSCredentials(awsId, awsKey);
+        AmazonS3 amazonS3Client = AmazonS3ClientBuilder.standard()
+                .withRegion(Regions.fromName(region))
+                .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
+                .build();
+
+        return amazonS3Client;
+    }
 	
 	
 	

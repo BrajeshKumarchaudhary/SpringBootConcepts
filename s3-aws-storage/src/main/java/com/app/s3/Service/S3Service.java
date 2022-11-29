@@ -3,57 +3,87 @@ package com.app.s3.Service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Date;
 
-import javax.annotation.PostConstruct;
-
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
+import com.amazonaws.util.IOUtils;
 
 @Service
 public class S3Service {
+	private org.slf4j.Logger logger = LoggerFactory.getLogger(S3Service.class);
 
+	@Autowired
 	private AmazonS3 amazonS3Client;
-	@Value("${amazonProperties.endpointUrl}")
-	private String endPoint;
 
-	@Value("${amazonProperties.accessKey}")
-	private String accessKey;
-
-	@Value("${amazonProperties.secretKey}")
-	private String secretKey;
-
-	@Value("${amazonProperties.bucketName}")
+	@Value("${application.bucket.name}")
 	private String bucketName;
 
-	@SuppressWarnings("deprecation")
-	@PostConstruct
-	private void initializeAmazon() {
-		AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
-		this.amazonS3Client = new AmazonS3Client(credentials);
+	/**
+	 * Upload File into AWS S3 Bucket
+	 * 
+	 * @param file
+	 * @return
+	 */
+
+	public String uploadFile(MultipartFile file) {
+		try {
+			String fileName = generateFileName(file);
+			uploadFileTos3bucket(fileName, convertMultiPartToFile(file));
+			return "File uploaded:" + fileName;
+		} catch (IOException ioe) {
+			logger.error("IOException: " + ioe.getMessage());
+		} catch (AmazonServiceException serviceException) {
+			logger.info("AmazonServiceException: " + serviceException.getMessage());
+			throw serviceException;
+		} catch (AmazonClientException clientException) {
+			logger.info("AmazonClientException Message: " + clientException.getMessage());
+			throw clientException;
+		}
+		return "File not uploaded";
 	}
 
-	public String uploadFile(MultipartFile Multipartfile) {
-		String fileUrl = "";
+	/**
+	 * Download file from AWS S3 Bucket
+	 * 
+	 * @param fileName
+	 * @return
+	 */
+	public byte[] downloadFile(String fileName) {
+		S3Object s3Object = amazonS3Client.getObject(bucketName, fileName);
+		S3ObjectInputStream inputStream = s3Object.getObjectContent();
 		try {
-			File file = convertMultiPartToFile(Multipartfile);
-			String fileName = generateFileName(Multipartfile);
-			fileUrl = endPoint + "/" + bucketName + "/" + fileName;
-			uploadFileTos3bucket(fileName, file);
-			file.delete();
-		} catch (Exception e) {
+			byte[] content = IOUtils.toByteArray(inputStream);
+			return content;
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return fileUrl;
+		return null;
+	}
+
+	/**
+	 * Delete File from AWS S3 Bucket
+	 * 
+	 * @param fileName
+	 * @return
+	 */
+
+	public String deleteFileFromS3Bucket(String fileName) {
+		amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, fileName));
+		return "Successfully deleted";
 	}
 
 	private File convertMultiPartToFile(MultipartFile file) throws IOException {
@@ -71,12 +101,6 @@ public class S3Service {
 
 	private String generateFileName(MultipartFile multiPart) {
 		return new Date().getTime() + "-" + multiPart.getOriginalFilename().replace(" ", "_");
-	}
-
-	public String deleteFileFromS3Bucket(String fileUrl) {
-		String fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
-		amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName + "/", fileName));
-		return "Successfully deleted";
 	}
 
 }
