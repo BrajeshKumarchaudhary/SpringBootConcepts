@@ -3,6 +3,7 @@ package com.app.rabbitmq.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ResourceProperties.Fixed;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,7 +19,9 @@ public class MarketingData {
 	@Autowired
 	private AmqpTemplate amqpTemplate;
 	
-	@Scheduled(fixedRate = 1000)
+
+	
+//	@Scheduled(fixedRate = 1000)
 	public void publishMarketingdata()
 	{
 		Notification obj=new Notification();
