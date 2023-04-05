@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- <configuration scan="true" scanPeriod="10 seconds" INFO="true"> <include
+   resource="org/springframework/boot/logging/logback/base.xml" /> <include
+   file="${konnect.log.file.path}/logback-task.xml" /> </configuration> -->
+
+<configuration scan="true" scanPeriod="10 seconds"
+               INFO="true">
+    <property name="LOG_PATH" value="app/logs" />
+
+   <conversionRule conversionWord="aw_log"
+		converterClass="com.example.kafka.filter.LogConvertor" />
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${HOSTNAME}/server.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${HOSTNAME}/server.%i.log</fileNamePattern>
+            <minIndex>1</minIndex>
+            <maxIndex>5</maxIndex>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <maxFileSize>500MB</maxFileSize>
+        </triggeringPolicy>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%aw_log%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="ASYNC_FILE"
+              class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold> <!-- default 20, means drop lower event when has 20% capacity remaining -->
+        <appender-ref ref="FILE" />
+        <queueSize>10000</queueSize> <!-- default 256 -->
+        <includeCallerData>true</includeCallerData><!-- default false -->
+        <neverBlock>true</neverBlock>
+    </appender>
+
+    <appender name="stdout1"
+              class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <encoder>
+            <charset>UTF-8</charset>
+            <pattern>%level - %class{36}.%M %L %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="httprequestresponselogger" additivity="false"
+            level="INFO">
+        <appender-ref ref="ASYNC_FILE"/>
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="ASYNC_FILE"/>
+    </root>
+</configuration>
